@@ -14,6 +14,7 @@ openshift_portal_net=172.30.0.0/16
 openshift_disable_check=disk_availability,memory_availability
 
 openshift_node_groups=[{'name': 'node-config-all-in-one', 'labels': ['node-role.kubernetes.io/master=true', 'node-role.kubernetes.io/infra=true', 'node-role.kubernetes.io/compute=true']}]
+#openshift_node_groups=[{'name': 'node-config-master', 'labels': ['node-role.kubernetes.io/master=true']}, {'name': 'node-config-infra', 'labels': ['node-role.kubernetes.io/infra=true']}, {'name': 'node-config-compute', 'labels': ['node-role.kubernetes.io/compute=true']}]
 
 openshift_master_cluster_public_hostname=ansible-target
 openshift_master_cluster_hostname=master.internal.local
@@ -29,6 +30,12 @@ openshift_master_identity_providers=[{'name': 'htpasswd_auth', 'login': 'true', 
 # or
 openshift_master_htpasswd_file=/etc/origin/master/htpasswd
 
+# Logging
+openshift_logging_install_logging=true
+openshift_logging_master_url=kibana.internal.local
+openshift_logging_es_nodeselector={"node-role.kubernetes.io/infra":"true"}
+
+
 [masters]
 ansible-target
 
@@ -41,3 +48,5 @@ etcd_listen_client_urls="https://0.0.0.0:2379"
 [nodes]
 # openshift_node_group_name should refer to a dictionary with matching key of name in list openshift_node_groups.
 ansible-target openshift_node_group_name="node-config-all-in-one"
+#ansible-target openshift_node_group_name="node-config-master"
+#infra openshift_node_group_name='node-config-infra'
